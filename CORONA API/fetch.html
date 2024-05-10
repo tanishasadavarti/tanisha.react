@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<style>
+    body{
+        background-color: rgb(197, 197, 197);
+    }
+    #container
+    {
+        display: grid;
+        grid-template-columns:repeat(3,1fr);
+        grid-gap: 5px;
+       
+    }
+    .box
+    {
+        border: 3px solid gray;
+        padding: 10px;
+        margin: 10px;
+        background-color: white;
+        box-shadow: 0px 0px 5px gray;
+    }
+    .text
+    {
+        align-items: center;
+       text-align: center;
+      
+    }
+</style>
+
+<body>
+   <h1 class="text">CORENA API</h1>
+   <div id="container"></div>
+    
+</body>
+
+<script>
+    function Fetchdata(){
+        const store = fetch("https://api.rootnet.in/covid19-in/stats/latest")   
+            .then((res) => res.json())
+            .then((data) => cardlist(data.data.regional))
+            .catch((err) => console.log(err))
+
+    }
+    Fetchdata()
+
+    function cardlist(data){
+        // console.log(data)
+        const store=data.map((el)=>singlecard(el.location,el.confirmedCasesIndian,el.confirmedCasesForeign,el.discharged,el.deaths,el.confirmedButLocationUnidentified))
+        document.getElementById("container").innerHTML=store.join('');
+
+    }
+    
+    function singlecard(confirmedCasesIndian,location,confirmedCasesForeign,discharged,deaths,confirmedButLocationUnidentified){
+       let card=`
+       <div class="box">
+        <h2>location : ${location} </h2>
+        <h3>confirmedCasesIndian:${confirmedCasesIndian}</h3>
+        <h3>confirmedCasesForeign:${confirmedCasesForeign}</h3>
+        <h3>discharged":${discharged}</h3>
+        <h3>deaths: ${deaths}</h3>
+        <h3>confirmedButLocationUnidentified:${confirmedButLocationUnidentified}</h3>
+    </div>   
+       `
+       return card
+    }
+
+</script>
+
+</html>
